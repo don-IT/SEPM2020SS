@@ -1,0 +1,27 @@
+<div class="row mt-5">
+  <div class="col-12">
+    <h5>Current Enclosures</h5>
+  </div>
+</div>
+<div class="enclosure-list-header mt-4">
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr class="d-flex">
+      <th class="col-1" scope="col">Id</th>
+      <th class="col" scope="col">Name</th>
+      <th class="col" scope="col">Description</th>
+      <th class="col" scope="col">Public Information</th>
+    </tr>
+    </thead>
+    <tbody *ngIf="enclosures">
+    <ng-container *ngFor="let enclosure of enclosures">
+      <tr class="d-flex enclosure-list-item" (click)="showInfo(enclosure)" >
+        <td class="col-1">{{enclosure.id}}</td>
+        <td class="col">{{enclosure.name}}</td>
+        <td class="col">{{enclosure.description}}</td>
+        <td class="col">{{enclosure.publicInfo}}</td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>

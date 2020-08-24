@@ -1,0 +1,265 @@
+<button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModal">Create a task</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create a Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clearAlerts()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <app-alert class="p-3" [alertComponentId]="componentId"></app-alert>
+
+        <div class="row px-3 justify-content-around">
+          <div class="col"><h5>Task</h5></div>
+          <div class="col"><h5>Priority</h5></div>
+        </div>
+
+        <div class="row px-3 justify-content-around">
+          <div class="col btn-group btn-group-toggle" data-toggle="buttons">
+            <button (click)="setToAnimalTask()" type="radio" class="btn btn-secondary">Animal</button>
+            <button (click)="setToEnclosureTask()" type="radio" class="btn btn-secondary">Enclosure</button>
+          </div>
+          <div class="col btn-group btn-group-toggle" data-toggle="buttons">
+            <button (click)="setToNonPriorityTask()" type="radio" class="btn btn-secondary">Normal</button>
+            <button (click)="setToPriorityTask()" type="radio" class="btn btn-secondary">High</button>
+          </div>
+        </div>
+
+        <div class="row p-3 justify-content-center">
+          <div class="col btn-group btn-group-toggle" data-toggle="buttons">
+            <button (click)="changeRepeatable()" type="radio" class="col btn btn-outline-info">Repeatable</button>
+          </div>
+        </div>
+        <div class="row p-3">
+          <div class="col">
+            <form [formGroup]="taskCreationForm" (ngSubmit)="taskSubmitted()">
+              <div class="row">
+                <div class="form-group col-12">
+                  <label for="inputTitle">Title</label>
+                  <input type="text" name="title" formControlName="title" class="form-control" id="inputTitle"
+                         aria-describedby="TitleHelp" placeholder="Enter Task Title">
+                  <div *ngIf="submittedTask && taskCreationForm.controls.title.errors" class="error">
+                    <small class="form-text text-warning" *ngIf="taskCreationForm.controls.title.errors.required">
+                      Title cannot be empty
+                    </small>
+                  </div>
+                </div>
+                <div class="form-group col-12">
+                  <label for="inputDescription">Description</label>
+                  <textarea type="text" name="description" formControlName="description" class="form-control"
+                            id="inputDescription"
+                            aria-describedby="descriptionHelp" placeholder="Enter Task description"></textarea>
+                  <div *ngIf="submittedTask && taskCreationForm.controls.description.errors" class="error">
+                    <small class="form-text text-warning" *ngIf="taskCreationForm.controls.description.errors.required">
+                      Description cannot be empty
+                    </small>
+                  </div>
+                </div>
+                <ng-container *ngIf="highPriority">
+                  <div class="form-group col-6">
+                    <label for="inputDuration">Duration</label>
+                    <ngb-timepicker [hourStep]="1" [minuteStep]="5" [spinners]="false"
+                                    formControlName="duration" id="inputDuration"></ngb-timepicker>
+                    <div *ngIf="submittedTask && taskCreationForm.controls.duration.errors" class="error">
+                      <small class="form-text text-warning" *ngIf="taskCreationForm.controls.duration.errors.required">
+                        Duration cannot be empty
+                      </small>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <!--                Time Selection-->
+                <ng-container *ngIf="normalPriority">
+                  <div class="form-group col-6">
+                    <label for="inputStartTime">Start-Time</label>
+                    <input type="datetime-local" name="startTime" formControlName="startTime" class="form-control"
+                           id="inputStartTime"
+                           aria-describedby="startTimeHelp" placeholder="Enter Start-Time">
+                    <div *ngIf="submittedTask && taskCreationForm.controls.startTime.errors" class="error">
+                      <small class="form-text text-warning" *ngIf="taskCreationForm.controls.startTime.errors.required">
+                        Start-Time cannot be empty
+                      </small>
+                    </div>
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="inputEndTime">End-Time</label>
+                    <input type="datetime-local" name="endTime" formControlName="endTime" class="form-control"
+                           id="inputEndTime"
+                           aria-describedby="endTimeHelp" placeholder="Enter Start Time">
+                    <div *ngIf="submittedTask && taskCreationForm.controls.endTime.errors" class="error">
+                      <small class="form-text text-warning" *ngIf="taskCreationForm.controls.endTime.errors.required">
+                        End-Time cannot be empty
+                      </small>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <!--                Subject Selection-->
+                <div *ngIf="isAnimalTask == true" class="form-group col-6 select-animal">
+                  <label for="animalId">Select Animal</label>
+                  <select (change)="getEmployeesOfAnimal()" name="animalId" formControlName="subjectId"
+                          class="form-control" id="animalId"
+                          aria-describedby="animalIdHelp">
+                    <option disabled [ngValue]="null">Select animal</option>
+                    <ng-container *ngIf="animalsOfEmployee!=null">
+                      <option *ngFor="let animal of animalsOfEmployee" [ngValue]="animal.id">{{animal.name}}
+                        ; {{animal.species}}</option>
+                    </ng-container>
+                  </select>
+                  <div *ngIf="submittedTask && taskCreationForm.controls.subjectId.errors" class="error">
+                    <small class="form-text text-warning" *ngIf="taskCreationForm.controls.subjectId.errors.required">
+                      Animal cannot be empty
+                    </small>
+                  </div>
+                </div>
+
+                <div *ngIf="isEnclosureTask" class="form-group col-6 select-Enclosure">
+                  <label for="enclosureId">Select Enclosure</label>
+                  <select (change)="getEmployeesOfEnclosure()" name="animalId" formControlName="subjectId"
+                          class="form-control" id="enclosureId"
+                          aria-describedby="animalIdHelp">
+                    <option disabled [ngValue]="null">Select Enclosure</option>
+                    <ng-container *ngIf="enclosuresOfEmployee!=null">
+                      <option *ngFor="let enclosure of enclosuresOfEmployee" [ngValue]="enclosure.id">{{enclosure.id}}
+                        ; {{enclosure.name}}</option>
+                    </ng-container>
+                  </select>
+                  <div *ngIf="submittedTask && taskCreationForm.controls.subjectId.errors" class="error">
+                    <small class="form-text text-warning" *ngIf="taskCreationForm.controls.subjectId.errors.required">
+                      Enclosure cannot be empty
+                    </small>
+                  </div>
+                </div>
+
+                <ng-container *ngIf="normalPriority">
+                  <div class="form-group col-6">
+                    <label for="assignedEmployeeUsername">Assign to Employee</label>
+                    <select name="assignedEmployeeUsername" formControlName="assignedEmployeeUsername"
+                            class="form-control" id="assignedEmployeeUsername"
+                            aria-describedby="assignedEmployeeUsernameHelp">
+                      <option disabled [ngValue]="null">Select employee</option>
+                      <ng-container *ngIf="employeesFound">
+                        <option *ngFor="let employee of employeesOfTaskSubject;" [ngValue]="employee.username">
+                          {{employee.username}}; {{employee.name}}; caretaker
+                        </option>
+                      </ng-container>
+                      <ng-container *ngIf="isAnimalTask">
+                        <option *ngFor="let doctor of doctors" [ngValue]="doctor.username">
+                          {{doctor.username}}; {{doctor.name}}; doctor
+                        </option>
+                      </ng-container>
+                      <ng-container *ngIf="isEnclosureTask">
+                        <option *ngFor="let janitor of janitors" [ngValue]="janitor.username">
+                          {{janitor.username}}; {{janitor.name}}; janitor
+                        </option>
+                      </ng-container>
+                    </select>
+                    <div *ngIf="submittedTask && taskCreationForm.controls.assignedEmployeeUsername.errors"
+                         class="error">
+                      <small class="form-text text-warning"
+                             *ngIf="taskCreationForm.controls.assignedEmployeeUsername.errors.required">
+                        Employee cannot be empty
+                      </small>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <!--                Event Selection-->
+                <ng-container *ngIf="normalPriority">
+                  <div class="form-group col-12 btn-group btn-group-toggle">
+                    <label [class.btn-outline-primary]="taskCreationForm.controls.event.value !== true"
+                           [class.btn-primary]="taskCreationForm.controls.event.value === true"
+                           ngbButtonLabel>
+                      <input type="checkbox" ngbButton formControlName="event"> Make Public Event
+                    </label>
+                  </div>
+
+                  <ng-container *ngIf="taskCreationForm.controls.event.value === true">
+
+                    <!--   Event Public Info-->
+                    <div class="form-group col-12">
+                      <label for="inputPublicInfo">Public Event Information</label>
+                      <textarea type="text" name="publicInformation" formControlName="publicInfo" class="form-control"
+                                id="inputPublicInfo"
+                                aria-describedby="publicInformationHelp" placeholder="Enter Public Event Information"></textarea>
+                      <div *ngIf="submittedTask && taskCreationForm.controls.publicInfo.errors" class="error">
+                        <small class="form-text text-warning" *ngIf="taskCreationForm.controls.publicInfo.errors.required">Public
+                          Information is not valid!
+                        </small>
+                      </div>
+                    </div>
+
+                    <!--   Event Picture-->
+                    <div *ngIf="uploadedEventPicture" class="col-12">
+                      <label>Event Image</label>
+                      <img ngbButtonLabel (click)="imgUpload.click()"
+                           src={{uploadedEventPicture}} alt="" id="img"
+                           class="img-thumbnail w-70">
+                      <br>
+                    </div>
+                    <div class="form-group col-12 btn-group">
+                      <label type="button" id="imgUploadBtn" class="btn btn-success" (click)="imgUpload.click()">Upload Image
+                      </label>
+                      <input style="display: none" type="file" name="picture" accept=".png, .jpg, .jpeg"
+                             (change)="OnImageFileSelected($event);" formControlName="eventPicture"
+                             id="newInputPicture" aria-describedby="pictureHelp" #imgUpload/>
+                    </div>
+
+
+                  </ng-container>
+                </ng-container>
+
+                <div class="form-group col-12" *ngIf="isRepeatable">
+                  <label for="inputAmount">Amount</label>
+                  <input type="number" name="amount" formControlName="amount" class="form-control" id="inputAmount"
+                         aria-describedby="AmountHelp" value="1" min="1">
+                </div>
+                <div class="form-group col-6" *ngIf="isRepeatable">
+                  <label for="inputSeparation">Separation</label>
+                  <select name="separation" formControlName="separation" class="form-control" id="inputSeparation"
+                          aria-describedby="AmountHelp">
+                    <option *ngFor="let timeUnit of timeUnitValues" [ngValue]="timeUnits[timeUnit]" [defaultSelected]="true">{{timeUnit}}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-6" *ngIf="isRepeatable">
+                  <label for="inputSeparationAmount">Separation-Amount</label>
+                  <input type="number" name="separationAmount" formControlName="separationAmount" class="form-control" id="inputSeparationAmount"
+                         aria-describedby="AmountHelp" value="1" min="1">
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+        <div *ngIf="selectEmployeeTypeMode" class="row">
+          <div class="col btn-group btn-group-toggle" data-toggle="buttons">
+            <button (click)="selectCaretaker()" type="radio" class="btn btn-primary">Caretaker</button>
+            <button (click)="selectDoctor()" *ngIf="isAnimalTask" type="radio" class="btn btn-primary">Doctor</button>
+            <button (click)="selectJanitor()" *ngIf="isEnclosureTask" type="radio" class="btn btn-primary">Janitor</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="switchSelectEmployeeTypeMode()" class="btn btn-info col">Select Employee Type</button>
+        <ng-container *ngIf="normalPriority">
+          <button *ngIf="!selectEmployeeTypeMode" type="button" (click)="taskSubmitted()" class="btn btn-success col">Create Task</button>
+          <button *ngIf="selectEmployeeTypeMode && employeeTypeSelected" type="button" (click)="taskWithAutoAssignSubmitted()" class="btn btn-success col">Create and Auto-Assign</button>
+        </ng-container>
+        <ng-container *ngIf="highPriority">
+          <button *ngIf="selectEmployeeTypeMode && employeeTypeSelected" type="button" (click)="priorityTaskSubmitted()" class="btn btn-warning col">Create Priority Task
+          </button>
+        </ng-container>
+      </div>
+      <div class="modal-footer justify-content-around">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clearAlerts()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<!-- Button trigger modal -->
+<button #modalToggleBtn type="button" class="btn btn-sm mr-2 btn-outline-info" data-toggle="modal" [attr.data-target]="'#info'+index">
+  Info
+</button>
+
+<!-- Modal -->
+<div appStopClickPropagation class="modal fade" id="info{{index}}" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+
+    <div class="modal-content">
+<!--      <div class="modal-header">-->
+<!--        <h3 class="modal-title ml-1" id="staticBackdropLabel">{{task.title}}</h3>-->
+<!--        <button (click)="reloadTasks.emit(); toggleModal()" type="button" class="close"  aria-label="Close">-->
+<!--          <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+<!--      </div>-->
+      <div class="modal-body" >
+         <ng-container *ngIf="task.event">
+          <div>
+                      <div class="row p-1">
+                        <div >
+                          <img *ngIf="task.eventPicture != null" src={{task.eventPicture}} alt="" id="img"
+                               class="card-img-top">
+
+                          <br>
+                          <br>
+                          <h3 class="col-12">{{task.title}}</h3>
+
+                          <!--   Event Time-->
+                          <div>
+                            <div class="col-12">
+                              <h5 class="modal-title">Time and Date</h5>
+                              <ng-container
+                                *ngIf="task.startTime.split(' ')[0] === task.endTime.split(' ')[0] " >
+                                <p>
+                                  <b>Date:</b> {{task.startTime.split(' ')[0]}}
+                                  <br>
+                                  <b>Time: </b> {{task.startTime.split(' ')[1]}} - {{task.endTime.split(' ')[1]}}
+                                </p>
+                              </ng-container>
+                              <ng-container
+                                *ngIf="task.startTime.split(' ')[0] !== task.endTime.split(' ')[0] " >
+                                <p>
+                                  <b>Starts on the </b>{{task.startTime.split(' ')[0]}} at {{task.startTime.split(' ')[1]}}
+                                  <br>
+                                  <b>And ends on the: </b> {{task.endTime.split(' ')[0]}} at {{task.endTime.split(' ')[1]}}
+                                </p>
+                              </ng-container>
+
+                            </div>
+                          </div>
+
+                          <h5 class="col-12">Details</h5>
+
+                          <!--   Public Event Info-->
+                          <div class="col-12">
+                            <div *ngIf="task.publicInfo!=null" >
+                              {{task.publicInfo}}
+                            </div>
+                            <div *ngIf="(task.publicInfo == null || task.publicInfo =='')"
+                                 class="card-body text-muted">
+                              Has no public info.
+                            </div>
+                          </div>
+
+                          <br>
+
+                          <!--   Subject Info-->
+                          <div class="col-12" *ngIf="task.animalTask == true && animal!=null">
+                            <h6>The Star of this event: <span class="text-primary">{{animal.name}}</span> </h6>
+                            <p>
+                              Some more info about {{animal.name}}:
+                              <br>
+                              {{animal.publicInformation}}
+                            </p>
+                          </div>
+                          <div class="col-12" *ngIf="task.animalTask == false && enclosure!=null">
+                            <h6>The stage (enclosure) for this event: <span class="text-primary">The {{enclosure.name}}</span></h6>
+                            <p>
+                              Some more info about the enclosure:
+                              <br>
+                              {{enclosure.publicInfo}}
+                            </p></div>
+                        </div>
+                      </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!task.event">
+          <p>This is not an Event and can therefore not be viewed like this, sorry for the inconvenience. </p>
+        </ng-container>
+
+
+      </div>
+
+
+      <div class="modal-footer">
+        <button (click)="reloadTasks.emit(); toggleModal()" type="button" class="btn btn-secondary" >Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,13 @@
+@import "~bootstrap";
+
+.row-break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.col-break {
+  flex-basis: 100%;
+  width: 0;
+}
+
+

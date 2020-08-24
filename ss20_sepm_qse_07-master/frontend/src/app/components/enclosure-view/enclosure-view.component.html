@@ -1,0 +1,152 @@
+
+
+
+<br>
+<button *ngIf="isAdmin() || isUser()" class="float-md-right md-primary pull-right btn btn-secondary" type="button"
+        (click)="backClicked()">BACK
+</button>
+
+<br>
+<br>
+<br>
+
+<ng-container *ngIf="isAdmin() || isUser()">
+  <div class="row no-gutters">
+    <div class="col">
+      <div class="card-block px-2">
+        <h2 *ngIf="enclosureToView && enclosureToView.name!=null" class="info-title">
+          Enclosure Name: {{enclosureToView.name}}
+        </h2>
+        <span *ngIf="enclosureToView &&enclosureToView.id!=null"
+              class="badge badge-secondary">Id: {{enclosureToView.id}}</span>
+      </div>
+    </div>
+    <div class="col-2">
+      <img *ngIf="enclosureToView &&enclosureToView.picture!=null" src="{{enclosureToView.picture}}" class="img-fluid"
+           alt="Picture of the Enclosure">
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    <h4 class="info-title">
+      Description
+    </h4>
+
+    <div class="card">
+      <div *ngIf="enclosureToView && enclosureToView.description!=null" class="card-body">
+        {{enclosureToView.description}}
+      </div>
+      <div *ngIf="enclosureToView && (enclosureToView.description==null || enclosureToView.description=='')"
+           class="card-body text-muted">
+        Has no description.
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    <h4 class="info-title">
+      Public Information
+    </h4>
+    <div class="card">
+      <div *ngIf="enclosureToView && enclosureToView.publicInfo!=null" class="card-body">
+        {{enclosureToView.publicInfo}}
+      </div>
+
+
+      <div *ngIf="enclosureToView && (enclosureToView.publicInfo==null  || enclosureToView.publicInfo=='')"
+           class="card-body text-muted">
+        Has no public Information.
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="row no-gutters justify-content-end" *ngIf="editing===false && isAdmin() && enclosureToView!=null">
+    <app-delete-warning
+      (deleteSubject)="deleteEnclosure()"
+      (editSubject)="editEnclosure()"
+      [deletionSubjectType]="'Enclosure'"
+      [readableSubjectIdentifier]="enclosureToView.name"
+      [showEditOrDeleteButton]="true"
+      [outlinedButtons]="false"></app-delete-warning>
+
+  </div>
+
+  <ng-container class="Assigned Entities Component" *ngIf="isAdmin() && editing===false">
+    <hr>
+    <div class="row">
+      <div class="col">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button (click)="toAnimalMode()" *ngIf="this.enclosureToView!=null" type="button"
+                  class="btn btn-dark">Assigned Animals
+          </button>
+          <button (click)="toTaskMode()" type="button" class="btn btn-dark">Assigned Tasks</button>
+        </div>
+      </div>
+    </div>
+
+    <ng-container class="Animal List Mode " *ngIf="enclosureToView!=null  && animalMode && isAdmin()">
+      <div class="row">
+        <div class="col-lg-12" *ngIf="assignedAnimals != null && assignedAnimals.length != 0">
+          <app-animal-list (unassignAnimal)="unassignAnimal($event)" [enclosurePage]="true"
+                           [animals]="assignedAnimals"></app-animal-list>
+        </div>
+      </div>
+      <ng-container *ngIf="isAdmin()">
+        <div class="row my-3">
+          <div class="col-lg-12">
+            <h5>Assign new Animal to Enclosure:</h5>
+          </div>
+        </div>
+        <div class="row mb-5">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <select class="animal-select form-control" [(ngModel)]="selectedAnimal" name="selectedAnimal">
+                <option disabled [ngValue]="null">Select animal to assign</option>
+                <option *ngFor="let animal of animalList" [ngValue]="animal">{{animal.name}}; {{animal.species}}</option>
+              </select>
+            </div>
+
+            <button type="button" (click)="assignAnimaltoEnclosure()" class="btn btn-success m-1 ">Assign</button>
+
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-container class="Task List View" *ngIf="enclosureToView!=null && taskMode">
+      <div class="row">
+        <div class="col-lg-12">
+          <app-task-list-common (reloadTasks)="loadEnclosureTasks()" [janitors]="janitors" [employees]="employeesAssigned" [tasks]="tasks"></app-task-list-common>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </ng-container>
+
+  <ng-container class="Assigned Entities Component" *ngIf="isUser() && editing===false">
+    <ng-container class="Task List View" *ngIf="enclosureToView!=null && taskMode">
+      <div class="row">
+        <div class="col-lg-12">
+          <app-task-list-common (reloadTasks)="loadEnclosureTasks()" [janitors]="janitors" [employees]="employeesAssigned" [tasks]="tasks"></app-task-list-common>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </ng-container>
+
+  <br>
+</ng-container>
+
+
+
+
+
+
+

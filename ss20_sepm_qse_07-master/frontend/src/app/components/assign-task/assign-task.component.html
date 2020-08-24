@@ -1,0 +1,82 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-sm btn-outline-success" data-toggle="modal"
+        [attr.data-target]="'#assign-task' + index">
+  Assign
+</button>
+
+<!-- Modal -->
+<div class="modal fade" [attr.id]="'assign-task'+ index" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Assign Task to employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="vanishAll()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <app-alert class="p-3" [alertComponentId]="componentId"></app-alert>
+
+
+        <div class="row mb-3 justify-content-center">
+          <div class=" col-6 btn-group btn-group-toggle" data-toggle="buttons">
+            <button (click)="selectEmployeeTypeMode=true; employeeType=null; enable=false" type="radio"
+                    class="btn btn-primary">
+              Automatically
+            </button>
+            <button (click)="selectEmployeeTypeMode=false; employeeType=null; enable=true" type="radio"
+                    class="btn btn-primary">
+              Manually
+            </button>
+          </div>
+        </div>
+
+        <label *ngIf="!selectEmployeeTypeMode" for="id">Select employee to assign the task</label>
+        <label *ngIf="selectEmployeeTypeMode" for="id">Select employee type to assign the task</label>
+        <div *ngIf="selectEmployeeTypeMode" class="row">
+          <div class="col btn-group btn-group-toggle" data-toggle="buttons">
+            <button (click)="employeeType='CARETAKER'" type="radio" class="btn btn-primary">Caretaker</button>
+            <button (click)="employeeType='DOCTOR'" *ngIf="task.animalTask" type="radio" class="btn btn-primary">
+              Doctor
+            </button>
+            <button (click)="employeeType='JANITOR'" *ngIf="!task.animalTask" type="radio" class="btn btn-primary">
+              Janitor
+            </button>
+          </div>
+        </div>
+
+        <select *ngIf="!selectEmployeeTypeMode" [(ngModel)]="selectedEmployee" name="assignedEmployeeUsername"
+                class="form-control" id="id"
+                aria-describedby="assignedEmployeeUsernameHelp">
+          <option disabled [ngValue]="null">Select employee</option>
+          <ng-container *ngIf="employees!=null">
+            <option *ngFor="let employee of employees;" [ngValue]="employee">
+              {{employee.username}}; {{employee.name}}; {{employee.type}};
+            </option>
+          </ng-container>
+          <ng-container *ngIf="doctors!=null">
+            <option *ngFor="let employee of doctors;" [ngValue]="employee">
+              {{employee.username}}; {{employee.name}}; {{employee.type}};
+            </option>
+          </ng-container>
+          <ng-container *ngIf="janitors!=null">
+            <option *ngFor="let employee of janitors;" [ngValue]="employee">
+              {{employee.username}}; {{employee.name}}; {{employee.type}};
+            </option>
+          </ng-container>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button (click)="vanishAll()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button *ngIf="enable" type="button"
+                class="btn btn-primary" (click)="assign()">Assign
+        </button>
+        <button *ngIf="selectEmployeeTypeMode==true " type="button"
+                class="btn btn-primary" (click)="assignAutomaticly(employeeType)">Assign automatically
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

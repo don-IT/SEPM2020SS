@@ -1,0 +1,6 @@
+<div *ngFor="let alert of alerts" >
+  <ngb-alert [type]="alert.type"  [dismissible]="alert.dismissible" (close)="closeAlert(alert)">
+    <strong>{{alert.title}} </strong>
+    <span class="e2e-inner-html-bound" [innerHTML]="alert.message"></span>
+  </ngb-alert>
+</div>

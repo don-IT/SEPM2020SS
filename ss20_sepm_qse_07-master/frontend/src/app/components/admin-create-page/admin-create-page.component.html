@@ -1,0 +1,46 @@
+<div *ngIf="isAdmin()">
+  <div class="employee-creation-header row">
+    <div class="col-12">
+      <h5 style="margin-top: 25px;">Create new Admin</h5>
+    </div>
+  </div>
+  <div class="employee-creation-body">
+    <form class="form" [formGroup]="adminCreationForm" (ngSubmit)="addAdmin()">
+      <div class="row">
+
+        <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+          <label for="inputUsername">Username</label>
+          <input type="text" name="username" formControlName="username" class="form-control" id="inputUsername"
+                 aria-describedby="usernameHelp" placeholder="Enter username">
+          <div *ngIf="submittedAdmin && adminCreationForm.controls.username.errors" class="error">
+            <small class="form-text text-warning" *ngIf="adminCreationForm.controls.username.errors.required">Username
+              is
+              required!
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+          <label for="inputPassword">Password</label>
+          <input type="password" name="password" formControlName="password" class="form-control" id="inputPassword"
+                 aria-describedby="passwordHelp" placeholder="Enter password">
+          <div *ngIf="submittedAdmin && adminCreationForm.controls.password.errors" class="error">
+            <small class="form-text text-warning" *ngIf="adminCreationForm.controls.password.errors.required">
+              Password is required!
+            </small>
+            <small class="form-text text-warning" *ngIf="adminCreationForm.controls.password.errors.minlength">
+              Password must be min. 8s Letters
+            </small>
+            <small class="form-text text-warning" *ngIf="adminCreationForm.controls.password.errors.pattern">
+              Password must have at least 1 uppercase letter, 1 lowercase letter and 1 number
+            </small>
+          </div>
+        </div>
+
+        <button type="button" (click)="addAdmin()" class="btn btn-success my-3 float-right">Add Admin</button>
+
+      </div>
+    </form>
+  </div>
+</div>
+

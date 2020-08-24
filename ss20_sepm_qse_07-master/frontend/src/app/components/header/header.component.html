@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+  <a class="navbar-brand ml-lg-5" href="">Zoo Manager</a>
+  <button class="navbar-toggler ml-5" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!isAdmin() && authService.isLoggedIn()" routerLink="/personal-info" routerLinkActive="active">Info</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!isAdmin() && authService.isLoggedIn()" routerLink="/calendar" routerLinkActive="active">Calendar</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="isAdmin() && authService.isLoggedIn()" routerLink="/employee" routerLinkActive="active">Employees</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="isAdmin() && authService.isLoggedIn()" routerLink="/animal" routerLinkActive="active">Animals</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="isAdmin() && authService.isLoggedIn()" routerLink="/enclosure" routerLinkActive="active">Enclosures</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="isAdmin() && authService.isLoggedIn()" routerLink="/tasks" routerLinkActive="active">Tasks</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/event" routerLinkActive="active">Events</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="isAdmin() && authService.isLoggedIn()" routerLink="/admin" routerLinkActive="active">Create Admin</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav mr-5">
+      <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active">Login</a>
+      <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/" (click)="authService.logoutUser()">Logout</a>
+    </ul>
+  </div>
+</nav>

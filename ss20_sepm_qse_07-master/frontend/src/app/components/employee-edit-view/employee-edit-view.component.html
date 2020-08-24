@@ -1,0 +1,109 @@
+<br>
+<form *ngIf="isAdmin()" class="form" [formGroup]="employeeEditInfo" (ngSubmit)="saveChanges()">
+
+  <div class="employee-creation-body">
+    <form *ngIf="changingPassword===false" class="form" [formGroup]="employeeEditInfo" (ngSubmit)="saveChanges()">
+      <div class="row">
+        <div class="form-group col-md-4 pr-1 col-sm-6 col-lg-3 col-xs-12">
+          <label for="inputName">Name</label>
+          <input type="text" name="name" formControlName="name" class="form-control" id="inputName"
+                 aria-describedby="nameHelp" placeholder="Enter name">
+          <div *ngIf="submittedEmployee && employeeEditInfo.controls.name.errors" class="error">
+            <small class="form-text text-warning" *ngIf="employeeEditInfo.controls.name.errors.required">Name is
+              required!
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+          <label for="inputEmail">Email <small class="text-secondary">(Optional)</small></label>
+          <input type="text" name="email" formControlName="email" class="form-control" id="inputEmail"
+                 aria-describedby="emailHelp" placeholder="Enter User Email">
+          <div *ngIf="submittedEmployee && employeeEditInfo.controls.email.errors" class="error">
+            <small class="form-text text-warning" *ngIf="employeeEditInfo.controls.email.errors.email">Must be a
+              valid
+              E-Mail Address or empty.-
+            </small>
+          </div>
+        </div>
+
+        <div *ngIf="employeeLoaded" class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+          <label for="inputBirthday">Birthday</label>
+          <input  type="text" name="birthday" formControlName="birthday" class="form-control" id="inputBirthday">
+          <div *ngIf="submittedEmployee && employeeEditInfo.controls.birthday.errors" class="error">
+            <small class="form-text text-warning" *ngIf="employeeEditInfo.controls.birthday.errors.required">Birthday
+              is
+              required!
+            </small>
+          </div>
+        </div>
+
+
+
+
+        <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+          <label for="inputWorkStartTime">Start-Time</label>
+          <input type="time" name="workStartTime" formControlName="workStartTime" class="form-control"
+                 id="inputWorkStartTime"
+                 aria-describedby="startTimeHelp" placeholder="Enter Start-Time">
+          <div *ngIf="submittedEmployee && employeeEditInfo.controls.workStartTime.errors" class="error">
+            <small class="form-text text-warning" *ngIf="employeeEditInfo.controls.workStartTime.errors.required">
+              Start-Time cannot be empty
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+          <label for="inputWorkEndTime">End-Time</label>
+          <input type="time" name="workEndTime" formControlName="workEndTime" class="form-control"
+                 id="inputWorkEndTime"
+                 aria-describedby="startTimeHelp" placeholder="Enter End-Time">
+          <div *ngIf="submittedEmployee && employeeEditInfo.controls.workEndTime.errors" class="error">
+            <small class="form-text text-warning" *ngIf="employeeEditInfo.controls.workEndTime.errors.required">
+              End-Time cannot be empty
+            </small>
+          </div>
+        </div>
+      </div>
+      <button *ngIf="isAdmin()" class="float-md-right pull-right btn btn-info" type="submit"
+      >Save changes
+      </button>
+      <button *ngIf="isAdmin() " class="float-md-right pull-right btn btn-outline-info" type="button"
+              (click)="cancelChanges()">Cancel
+      </button>
+      <button *ngIf="changingPassword===false" class="float-md-right pull-right btn btn-outline-info" type="button"
+              (click)="changePasswordButton()">Change Password
+      </button>
+    </form>
+
+  <form *ngIf="changingPassword===true && isAdmin()" class="form" [formGroup]="passwordEdit" (ngSubmit)="savePassword()" >
+
+    <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+      <label for="inputPassword">New Password</label>
+      <input type="password" name="password" formControlName="password" class="form-control" id="inputPassword"
+             aria-describedby="passwordHelp" placeholder="Enter new password">
+      <div *ngIf="passwordEdit.controls.password.errors" class="error">
+        <small class="form-text text-warning" *ngIf="passwordEdit.controls.password.errors.minlength">
+          Password must be min. 8s Letters
+        </small>
+        <small class="form-text text-warning" *ngIf="passwordEdit.controls.password.errors.pattern">
+          Password must have at least 1 uppercase letter, 1 lowercase letter and 1 number
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+      <label for="inputConfirmPassword">Confirm new Password</label>
+      <input type="password" name="confirmPassword" formControlName="confirmPassword" class="form-control" id="inputConfirmPassword"
+             aria-describedby="passwordHelp" placeholder="Confirm new password">
+    </div>
+
+    <button  class="float-md-right pull-right btn btn-outline-info" type="button"
+            (click)="cancelChanges()">Cancel
+    </button>
+    <button  class="float-md-right pull-right btn btn-outline-info" type="button"
+             (click)="savePassword()">Save
+    </button>
+  </form>
+  </div>
+</form>

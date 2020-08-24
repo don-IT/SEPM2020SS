@@ -1,0 +1,123 @@
+<app-alert [alertComponentId]="componentId"></app-alert>
+<div class="row mt-5">
+  <div class="col-12">
+    <h5>Current Tasks</h5>
+  </div>
+</div>
+<div class="animal-list-header mt-4">
+  <table class="table table-striped table-hover dt-responsive">
+    <thead>
+    <tr class="row">
+      <th class="col" scope="col">Title</th>
+      <th class="col" scope="col">Begin</th>
+      <th class="col" scope="col">End</th>
+      <th class="col" scope="col">Assignee</th>
+      <th class="col" scope="col">
+        <button *ngIf="deleteFollowing" (click)="changeDeleteState()" class="btn my-0 btn-warning btn-sm">Delete with following</button>
+        <button *ngIf="!deleteFollowing" (click)="changeDeleteState()" class="btn my-0 btn-primary btn-sm">Delete without following</button>
+      </th>
+    </tr>
+    </thead>
+    <tbody *ngIf="tasks!=null">
+    <ng-container *ngFor="let task of tasks; index as i;">
+      <tr class="row animal-list-item" [class.alert-warning]="task.priority">
+        <!--  (click)="toggleTaskInfoModal(task.id+task.title)"-->
+        <td class="col" (click)="toggleTaskInfoModal(task.id+task.title)" >{{task.title}}</td>
+      <!--  <td class="col">
+
+          <p *ngIf="!task.priority">Normal</p>
+        </td> -->
+        <td class="col" (click)="toggleTaskInfoModal(task.id+task.title)">{{task.startTime}}</td>
+        <td class="col" (click)="toggleTaskInfoModal(task.id+task.title)">{{task.endTime}}</td>
+        <ng-container *ngIf="task.assignedEmployeeUsername!=null">
+          <td class="col" (click)="toggleTaskInfoModal(task.id+task.title)">{{task.assignedEmployeeUsername}}</td>
+        </ng-container>
+        <ng-container *ngIf="task.assignedEmployeeUsername==null">
+          <td class="col" >
+            <app-assign-task (assignmentSuccessful)="reloadTasks.emit()" [index]="i"
+                             [employees]="employees" [doctors]="doctors" [janitors]="janitors" [task]="task"></app-assign-task>
+          </td>
+        </ng-container>
+        <td class="col d-flex justify-content-end align-items-baseline" >
+          <ng-container *ngIf="task.priority"> ✪ </ng-container>
+
+<!--  DONE Button start         -->
+          <ng-container *ngIf="task.status!='DONE'">
+                <ng-template #tipContent >
+                  You cannot mark this task as done, since it is not assigned to you. (Assigned to: <b>{{task.assignedEmployeeUsername}}</b>)
+                </ng-template>
+
+              <div class="mx-2" [ngbTooltip]="tipContent" *ngIf="!(isAdmin() || currentUser.username === task.assignedEmployeeUsername)">
+                <button
+                        appStopClickPropagation
+                        (click)="markTaskAsDone(task.id)"
+                        [disabled]="true"
+                        [class.btn-outline-dark]="true"
+                        [class.btn-outline-success]="false"
+                        class="btn mx-1 btn-sm">
+                  <span >Done!</span>
+                </button>
+              </div>
+              <div class="mx-2"  *ngIf="(isAdmin() || currentUser.username === task.assignedEmployeeUsername)">
+                <button *ngIf="(isAdmin() || currentUser.username === task.assignedEmployeeUsername)"
+                        appStopClickPropagation
+                        (click)="markTaskAsDone(task.id)"
+                        [disabled]="false"
+                        [class.btn-outline-dark]="false"
+                        [class.btn-outline-success]="true"
+                        class="btn mx-1 btn-sm">
+                  Done!
+                </button>
+              </div>
+              </ng-container>
+
+          <ng-container *ngIf="task.status=='DONE'">
+            <div  class="mx-2">
+              <button
+                [disabled]="true"
+                class="btn mx-1 btn-sm text-success btn-link">
+                <span>Done!</span>
+              </button>
+            </div>
+
+
+<!--            <div class="mx-3">Done!</div>-->
+          </ng-container>
+<!--  DONE Button end         -->
+
+          <app-task-info-update *ngIf="!isEventList"
+                                [stringId]="task.id+task.title"
+                                (reloadTasks)="reloadTasks.emit()" [editModeAlloved]="currentUserType!=='DOCTOR' && currentUserType!=='JANITOR'"
+                                [animalsOfEmployee]="animalsOfEmployee" [enclosuresOfEmployee]="enclosuresOfEmployee"
+            [task]="task" [index]="i" [currentEmployee]="currentUser"></app-task-info-update>
+          <app-event-info-view *ngIf="isEventList"
+                               [stringId]="task.id+task.title"
+                               (reloadTasks)="reloadTasks.emit()"
+                               [task]="task" [index]="i"></app-event-info-view>
+
+<!--          <div class="mx-2">-->
+<!--            <button *ngIf="currentUserType!=='DOCTOR' && currentUserType!=='JANITOR'" (click)="deleteTask(task.id)"-->
+<!--                    class="btn-sm btn-outline-danger btn">Delete-->
+<!--            </button>-->
+<!--          </div>-->
+
+<!--          (stopClickPropagationEvent)="stopDeleteClickPropagationFn()"-->
+<!--          (enableClickPropagationEvent)="enableDeleteClickPropagationFn()"-->
+
+          <app-delete-warning
+            *ngIf="currentUserType!=='DOCTOR' && currentUserType!=='JANITOR'"
+            [stringId]="(task.id + task.title).replace(' ', '')"
+            (toggleClickPropagationEvent)="toggleClickPropagation()"
+            [deletionSubjectType]="'Task'"
+            [readableSubjectIdentifier]="task.title"
+            [smallButton]="true"
+            (deleteSubject)="deleteTask(task.id)"></app-delete-warning>
+        </td>
+      </tr>
+    </ng-container>
+
+
+    </tbody>
+  </table>
+</div>
+

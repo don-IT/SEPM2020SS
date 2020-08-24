@@ -1,0 +1,81 @@
+<div #modalToggleBtn class="invisible no-gutters" [attr.data-target]="'#deleteWarning'+stringId.replace(' ', '')"
+       data-toggle="modal"></div>
+
+
+<div *ngIf="showEditOrDeleteButton" class="btn-group" appStopClickPropagation>
+  <ng-container *ngIf="eOdBtnIsEdit">
+    <button type="button" class="btn" (click)="editSubject.emit()"
+            [class.btn-sm]="smallButton"
+            [class.btn-outline-info]="outlinedButtons"
+            [class.btn-info]="!outlinedButtons"
+            >
+      Edit
+    </button>
+    <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+      <button class="btn dropdown-toggle-split" ngbDropdownToggle
+              [class.btn-sm]="smallButton"
+              [class.btn-outline-info]="outlinedButtons"
+              [class.btn-info]="!outlinedButtons"
+              appStopClickPropagation
+              ></button>
+      <div class="dropdown-menu" ngbDropdownMenu>
+        <button ngbDropdownItem (click)="toEditButton()" appStopClickPropagation>Edit</button>
+        <button ngbDropdownItem (click)="toDeleteButton()" appStopClickPropagation>{{delBtnText}}</button>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="eOdBtnIsDelete">
+    <button type="button" class="btn "
+            appStopClickPropagation
+            (click)="toggleModal()"
+            [class.btn-sm]="smallButton"
+            [class.btn-outline-danger]="outlinedButtons"
+            [class.btn-danger]="!outlinedButtons"
+            >{{delBtnText}}</button>
+    <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown" appStopClickPropagation>
+      <button class="btn dropdown-toggle-split" ngbDropdownToggle
+              [class.btn-sm]="smallButton"
+              [class.btn-outline-danger]="outlinedButtons"
+              [class.btn-danger]="!outlinedButtons"
+              appStopClickPropagation
+              ></button>
+      <div class="dropdown-menu" ngbDropdownMenu>
+        <button ngbDropdownItem (click)="toEditButton()" appStopClickPropagation>Edit</button>
+        <button ngbDropdownItem (click)="toDeleteButton()" appStopClickPropagation>{{delBtnText}}</button>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<button *ngIf="!showEditOrDeleteButton" type="button" class="btn mr-2"
+        [class.btn-sm]="smallButton"
+        [class.btn-outline-danger]="outlinedButtons"
+        [class.btn-danger]="!outlinedButtons"
+        (click)="toggleModal()" appStopClickPropagation>
+  {{delBtnText}}
+</button>
+
+<div #delModalBody appStopClickPropagation class="modal" id="deleteWarning{{stringId.replace(' ', '')}}" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title ml-1" id="staticBackdropLabel">
+          Deletion of <span class="text-primary">{{readableSubjectIdentifier}}</span>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <app-alert [alertComponentId]="readableSubjectIdentifier"></app-alert>
+        <b>You are about to delete the {{deletionSubjectType}}: <span class="text-primary">{{readableSubjectIdentifier}}</span>.</b>
+        <br><br>
+        <span class="text-danger">This cannot be undone, are you sure you want to continue?</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info"  (click)="toggleModal()">Cancel</button>
+        <button (click)="deleteSubject.emit()" type="button"
+                class="btn btn-danger" data-dismiss="modal">Yes, Delete!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

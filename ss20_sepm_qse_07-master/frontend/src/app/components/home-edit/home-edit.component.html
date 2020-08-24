@@ -1,0 +1,99 @@
+<br>
+<form class="form" *ngIf="editing" [formGroup]="zooInformationEditInfo" (ngSubmit)="saveChanges()">
+  <div class="home-creation-body">
+
+  <div class="form-group col-12">
+    <label for="inputName">Change Name</label>
+    <input type="text" name="name" formControlName="name" class="form-control" id="inputName"
+           aria-describedby="nameHelp" placeholder="Enter new name">
+
+    <div *ngIf="submittedZooInfo && zooInformationEditInfo.controls.name.errors" class="error">
+      <small class="form-text text-warning" *ngIf="zooInformationEditInfo.controls.name.errors.required">Name
+        is
+        required!
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group col-12">
+    <label for="inputName">Change Address</label>
+    <input type="text" name="address" formControlName="address" class="form-control" id="inputAddress"
+           aria-describedby="addressHelp" placeholder="Enter new address">
+
+    <div *ngIf="submittedZooInfo && zooInformationEditInfo.controls.address.errors" class="error">
+      <small class="form-text text-warning" *ngIf="zooInformationEditInfo.controls.address.errors.required">Address
+        is
+        required!
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group col-12">
+    <label for="inputPublicInformation">Change Public information</label>
+    <textarea type="text" name="publicInformation" formControlName="publicInformation" class="form-control"
+              id="inputPublicInformation"
+              aria-describedby="publicInformationHelp" placeholder="Enter new Public information"></textarea>
+    <div *ngIf="submittedZooInfo && zooInformationEditInfo.controls.publicInformation.errors" class="error">
+      <small class="form-text text-warning" *ngIf="zooInformationEditInfo.controls.species.errors.required">Public
+        Information is not valid!
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+    <label for="inputWorkTimeStart">Start-Time</label>
+    <input type="time" name="workTimeStart" formControlName="workTimeStart" class="form-control"
+           id="inputWorkTimeStart"
+           aria-describedby="startTimeHelp" placeholder="Enter Start-Time">
+    <div *ngIf="submittedZooInfo && zooInformationEditInfo.controls.workTimeStart.errors" class="error">
+      <small class="form-text text-warning" *ngIf="zooInformationEditInfo.controls.workTimeStart.errors.required">
+        Start-Time cannot be empty
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-3 col-xs-12">
+    <label for="inputWorkTimeEnd">End-Time</label>
+    <input type="time" name="workTimeEnd" formControlName="workTimeEnd" class="form-control"
+           id="inputWorkTimeEnd"
+           aria-describedby="endTimeHelp" placeholder="Enter End-Time">
+    <div *ngIf="submittedZooInfo && zooInformationEditInfo.controls.workTimeEnd.errors" class="error">
+      <small class="form-text text-warning" *ngIf="zooInformationEditInfo.controls.workTimeEnd.errors.required">
+        End-Time cannot be empty
+      </small>
+    </div>
+  </div>
+
+
+  <div class="form-group col-lg-6 col-sm-12 mt-4">
+    <div class="row">
+      <div *ngIf="uploadedPicture" class="col">
+        <img src={{uploadedPicture}} alt="" id="img"
+             class="img-thumbnail w-70">
+      </div>
+      <div class="col">
+        <input style="display: none" type="file" name="picture" accept=".png, .jpg, .jpeg"
+               (change)="OnImageFileSelected($event);" formControlName="picture"
+               id="newInputPicture" aria-describedby="pictureHelp" #imgUpload/>
+        <button type="button" id="imgUploadBtn" class="btn btn-success" (click)="imgUpload.click()">Upload New Image</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="float-md-right pull-right btn btn-info" type="submit">
+    Save changes
+  </button>
+
+  <button class="float-md-right pull-right btn btn-outline-info" type="button" (click)="cancelChanges()">
+    Cancel
+  </button>
+
+  </div>
+</form>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+

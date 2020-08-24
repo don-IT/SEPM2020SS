@@ -1,0 +1,62 @@
+<br>
+<form *ngIf="isAdmin() && editing" class="form" [formGroup]="enclosureEditInfo" (ngSubmit)="saveChanges()">
+
+  <div class="form-group col-12">
+    <label for="inputName">Change Name</label>
+    <input type="text" name="name" formControlName="name" class="form-control" id="inputName"
+           aria-describedby="nameHelp" placeholder="Enter new name">
+
+    <div *ngIf="submittedEnclosure && enclosureEditInfo.controls.name.errors" class="error">
+      <small class="form-text text-warning" *ngIf="enclosureEditInfo.controls.name.errors.required">Name
+        is
+        required!
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group col-12">
+    <label  for="inputDescription">Change Description</label>
+    <textarea type="text" name="description" formControlName="description" class="form-control"
+              id="inputDescription"
+              aria-describedby="descriptionHelp" placeholder="Enter new description">{{this.enclosureToView.description}}</textarea>
+    <div *ngIf="submittedEnclosure && enclosureEditInfo.controls.description.errors" class="error">
+      <small class="form-text text-warning" *ngIf="enclosureEditInfo.controls.name.errors.required">Description
+        is required!
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group col-12">
+    <label for="inputPublicInformation">Change Public information</label>
+    <textarea type="text" name="publicInformation" formControlName="publicInformation" class="form-control"
+              id="inputPublicInformation"
+              aria-describedby="publicInformationHelp" placeholder="Enter new Public information"></textarea>
+    <div *ngIf="submittedEnclosure && enclosureEditInfo.controls.publicInformation.errors" class="error">
+      <small class="form-text text-warning" *ngIf="enclosureEditInfo.controls.species.errors.required">Public
+        Information is not valid!
+      </small>
+    </div>
+  </div>
+  <div class="form-group col-lg-6 col-sm-12 mt-4">
+    <div class="row">
+      <div *ngIf="uploadedPicture" class="col">
+        <img src={{uploadedPicture}} alt="" id="img"
+             class="img-thumbnail w-70">
+      </div>
+      <div class="col">
+        <input style="display: none" type="file" name="picture" accept=".png, .jpg, .jpeg"
+               (change)="OnImageFileSelected($event);" formControlName="picture"
+               id="newInputPicture" aria-describedby="pictureHelp" #imgUpload/>
+        <button type="button" id="imgUploadBtn" class="btn btn-success" (click)="imgUpload.click()">Upload New Image
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button *ngIf="isAdmin() && editing===true" class="float-md-right pull-right btn btn-info" type="submit"
+  >Save changes
+  </button>
+  <button *ngIf="isAdmin() && editing===true" class="float-md-right pull-right btn btn-outline-info" type="button"
+          (click)="cancelChanges()">Cancel
+  </button>
+</form>

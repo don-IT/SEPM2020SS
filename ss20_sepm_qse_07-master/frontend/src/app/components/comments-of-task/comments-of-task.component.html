@@ -1,0 +1,43 @@
+<div class="row"><div class="col">
+  <button *ngIf="commentsVisible==false" (click)="commentsVisible = true; loadCommentsOfTask()" type="button"
+          class="btn btn-sm btn-info float-right">View Comments
+  </button>
+  <button *ngIf="commentsVisible==true" (click)="commentsVisible = false" type="button"
+          class="btn btn-sm btn-info float-right">Hide Comments
+  </button></div> </div>
+
+
+<br>
+<app-alert [alertComponentId]="componentId"></app-alert>
+<ng-container *ngIf="commentsVisible">
+
+  <form>
+    <div class="row">
+    <div class="form-group col">
+      <label class="h4" for="commentInput">Add comment</label>
+      <textarea [(ngModel)]="newCommentText" name="comment" type="text" id="commentInput"
+                class="form-control"></textarea>
+      <button (click)="addComment()" class="btn btn-outline-success mt-2 btn-sm float-right" type="submit">Add comment</button>
+
+    </div>
+    </div>
+  </form>
+  <br>
+  <div class="row">
+    <div class="col">
+      <ng-container *ngFor="let comment of commentsOfTask">
+        <div class="card bg-light my-2">
+          <div class="card-body">
+            <h5 class="card-title">{{comment.creatorUsername}}</h5>
+            <h6 class="card-subtitle text-secondary">{{comment.timeStamp}}</h6>
+            <p class="card-text">{{comment.comment}}</p>
+            <button (click)="deleteComment(comment.id)" class="btn btn-sm btn-outline-danger">Delete</button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+
+</ng-container>
+

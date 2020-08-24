@@ -1,0 +1,75 @@
+<div *ngIf="isAdmin()">
+  <app-animal-list (deleteAnimal)="deleteAnimal($event)" [animalPage]="true" [animals]="animals"></app-animal-list>
+
+  <div class="employee-creation-header row">
+    <div class="col-12">
+      <h5 style="margin-top: 25px;">Create new Animal</h5>
+    </div>
+  </div>
+  <div class="employee-creation-body">
+    <form class="form" [formGroup]="animalCreationForm" (ngSubmit)="addAnimal()">
+      <div class="row">
+        <div class="form-group pr-1  col-lg-6 col-xs-12">
+          <label for="inputName">Name</label>
+          <input type="text" name="name" formControlName="name" class="form-control" id="inputName"
+                 aria-describedby="nameHelp" placeholder="Enter name">
+
+          <div *ngIf="submittedAnimal && animalCreationForm.controls.name.errors" class="error">
+            <small class="form-text text-warning" *ngIf="animalCreationForm.controls.name.errors.required">Name is
+              required!
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group pr-1  col-lg-6 col-xs-12">
+          <label for="inputSpecies">Species</label>
+          <input type="text" name="species" formControlName="species" class="form-control" id="inputSpecies"
+                 aria-describedby="speciesHelp" placeholder="Enter species">
+          <div *ngIf="submittedAnimal && animalCreationForm.controls.species.errors" class="error">
+            <small class="form-text text-warning" *ngIf="animalCreationForm.controls.species.errors.required">Species is
+              required!
+            </small>
+          </div>
+        </div>
+        <!--
+                <div class="form-group pr-1 col-md-4 col-sm-6 col-lg-2 col-xs-12">
+                  <label for="inputEnclosure">Enclosure</label>
+                  <input type="text" name="enclosure" formControlEnclosure="enclosure" class="form-control" id="inputEnclosure"
+                         aria-describedby="enclosureHelp" placeholder="Enter enclosure">
+                  <div *ngIf="submittedAnimal && animalCreationForm.controls.enclosure.errors" class="error">
+                    <small class="form-text text-warning" *ngIf="animalCreationForm.controls.species.errors.required">Enclosure is required!
+                    </small>
+                  </div>
+                </div>
+        -->
+      </div>
+      <div class="row">
+        <div class="form-group pr-1 col-lg-6 col-sm-12">
+          <label for="inputDescription">Description</label>
+          <textarea type="text" name="description" formControlName="description" class="form-control"
+                    id="inputDescription"
+                    aria-describedby="descriptionHelp" placeholder="Enter description"></textarea>
+          <div *ngIf="submittedAnimal && animalCreationForm.controls.description.errors" class="error">
+            <small class="form-text text-warning" *ngIf="animalCreationForm.controls.description.errors.required">Description
+              is required!
+            </small>
+          </div>
+        </div>
+        <div class="form-group pr-1 col-lg-6 col-sm-12">
+          <label for="inputPublicInformation">Public information</label>
+          <textarea type="text" name="publicInformation" formControlName="publicInformation" class="form-control"
+                    id="inputPublicInformation"
+                    aria-describedby="publicInformationHelp" placeholder="Enter Public information"></textarea>
+          <div *ngIf="submittedAnimal && animalCreationForm.controls.publicInformation.errors" class="error">
+            <small class="form-text text-warning" *ngIf="animalCreationForm.controls.species.errors.required">Public
+              Information is not valid!
+            </small>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="button" (click)="addAnimal()" class="btn btn-success my-1 float-right">Add Animal</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<div *ngIf="!ready">
+    <h1 class="display-4">Welcome to our Zoo!</h1>
+</div>
+<div *ngIf="ready">
+
+  <br>
+
+  <div class="row no-gutters">
+    <div class="col">
+      <div class="card-block px-2">
+        <h1 *ngIf="zooInformation.name!=null" class="info-title">
+          Welcome to {{zooInformation.name}}
+        </h1>
+      </div>
+    </div>
+    <div class="col-2">
+      <img *ngIf="zooInformation.picture != null" src="{{zooInformation.picture}}" class="img-fluid"
+           alt="Picture of the Zoo">
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    <h4 class="info-title">
+      Address
+    </h4>
+    <div class="card">
+      <div *ngIf="zooInformation.address!=null" class="card-body">
+        {{zooInformation.address}}
+      </div>
+      <div *ngIf="zooInformation.address==null" class="card-body">
+        No address provided
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    <h4 class="info-title">
+      Public Information
+    </h4>
+    <div class="card">
+      <div *ngIf="zooInformation.publicInfo!=null" class="card-body">
+        {{zooInformation.publicInfo}}
+      </div>
+
+
+      <div *ngIf="zooInformation.publicInfo==null" class="card-body text-muted">
+        Has no public Information.
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div>
+    <h4 class="info-title">
+      Working hours
+    </h4>
+    <div class="card">
+      <div *ngIf="zooInformation.workTimeStart!=null && zooInformation.workTimeEnd!= null" class="card-body">
+        {{zooInformation.workTimeStart}} - {{zooInformation.workTimeEnd}}
+      </div>
+      <div *ngIf="zooInformation.workTimeStart==null || zooInformation.workTimeEnd== null" class="card-body text-muted">
+        Currently not visible
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <button type="button"  *ngIf="isAdmin()" (click)="editZooInformation()" class="btn btn-success m-1 ">Edit</button>
+</div>
+

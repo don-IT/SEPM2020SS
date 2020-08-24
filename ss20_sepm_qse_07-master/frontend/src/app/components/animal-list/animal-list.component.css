@@ -1,0 +1,6 @@
+#right-bar{
+  float:right;
+  width:100px;
+  height:100%;
+  border-left:1px solid black;
+}
